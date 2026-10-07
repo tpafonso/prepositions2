@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prepositions Quiz 2: Transport and Movement</title>
+<style>
+  :root{
+    --board:#0D1B2A;
+    --card:#15304A;
+    --line:#2C5271;
+    --line-soft:#1D3E58;
+    --ink:#F1F5F9;
+    --ink-dim:#9FB4C7;
+    --blue:#4FA8E8;
+    --purple:#B98BE8;
+    --yellow:#F5C84C;
+    --coral:#E8785A;
+    --green:#59C48B;
+    --opt-bg-correct:#1B4A34;
+    --opt-bg-wrong:#4A2620;
+  }
+  html[data-theme="light"]{
+    --board:#F4F8FC;
+    --card:#FFFFFF;
+    --line:#C7D9EA;
+    --line-soft:#E3EEF8;
+    --ink:#132A3D;
+    --ink-dim:#54697C;
+    --blue:#1C6FB0;
+    --purple:#7A4FC4;
+    --yellow:#B8860B;
+    --coral:#C1503A;
+    --green:#2F8F5B;
+    --opt-bg-correct:#DFF5E7;
+    --opt-bg-wrong:#FBE1DA;
+  }
+  *{box-sizing:border-box;}
+  :root{box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  .pic-row{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:clamp(16px,3vw,44px); align-items:center; max-width:1200px; margin:0 auto;}
+  .q-pic{background:var(--card); border:2px solid var(--line); border-radius:18px; padding:clamp(6px,1vw,12px);}
+  .q-pic svg{display:block; width:100%; height:auto; max-height:min(44vh,330px); margin:0 auto;}
+  .pic-main .prompt{font-size:clamp(22px,3vw,42px); text-align:left; margin:0 0 clamp(14px,2.2vh,24px);}
+  .pic-main .options{max-width:none; gap:clamp(10px,1.4vw,18px);}
+  .pic-main .opt{font-size:clamp(18px,2.1vw,28px); padding:clamp(10px,1.6vh,18px) 12px;}
+  @media (max-width:760px){ .pic-row{grid-template-columns:1fr;} .pic-main .prompt{text-align:center;} .q-pic svg{max-height:28vh;} }
+  .svg-wrap{overflow-x:auto; max-width:100%;}
+  html,body{
+    margin:0;padding:0;height:100%;
+    background:var(--board);
+    color:var(--ink);
+    font-family:"Trebuchet MS","Verdana",sans-serif;
+    overflow:hidden;
+  }
+  body{
+    background-image:
+      radial-gradient(circle at 12% 15%, rgba(79,168,232,0.06) 0, transparent 40%),
+      radial-gradient(circle at 88% 85%, rgba(79,168,232,0.05) 0, transparent 45%);
+  }
+  .wrap{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding:max(76px, clamp(16px,3vh,40px)) clamp(24px,5vw,80px) clamp(16px,3vh,40px);
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-shrink:0;
+    flex-wrap:wrap;
+  }
+  .section-tag{
+    font-size:clamp(15px,1.9vw,24px);
+    letter-spacing:0.03em;
+    color:var(--blue);
+    font-weight:bold;
+    border:2px solid var(--blue);
+    border-radius:999px;
+    padding:6px 20px;
+    white-space:nowrap;
+  }
+  .score-chip{
+    font-size:clamp(14px,1.7vw,22px);
+    font-weight:bold;
+    border-radius:999px;
+    padding:6px 18px;
+    white-space:nowrap;
+  }
+  .score-chip.solo{color:var(--yellow); border:2px solid var(--yellow);}
+  .score-chip.a{color:var(--blue); border:2px solid var(--blue);}
+  .score-chip.b{color:var(--purple); border:2px solid var(--purple);}
+  .score-chips{display:flex; gap:8px; flex-wrap:wrap;}
+  .progress{
+    flex:1;
+    min-width:100px;
+    margin:0 8px;
+    display:flex;
+    gap:6px;
+  }
+  .dot{
+    flex:1;
+    height:8px;
+    border-radius:4px;
+    background:var(--line);
+  }
+  .dot.done{background:var(--ink-dim);}
+  .dot.current{background:var(--blue);}
+  .counter{
+    font-size:clamp(13px,1.6vw,20px);
+    color:var(--ink-dim);
+    white-space:nowrap;
+  }
+
+  .stage{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:0;
+    overflow-y:auto;
+  }
+  .card{
+    width:100%;
+    max-width:1200px;
+    text-align:center;
+    margin:auto;
+  }
+
+  .turn-badge{
+    display:inline-block;
+    font-size:clamp(22px,3.2vw,38px);
+    font-weight:bold;
+    border-radius:999px;
+    padding:10px 34px;
+    margin-bottom:clamp(18px,2.8vh,32px);
+  }
+  .turn-badge.a{color:var(--blue); border:3px solid var(--blue); background:rgba(79,168,232,0.12);}
+  .turn-badge.b{color:var(--purple); border:3px solid var(--purple); background:rgba(185,139,232,0.14);}
+
+  .timer-wrap{
+    margin:0 0 clamp(16px,2.5vh,28px) 0;
+  }
+  .timer-label{
+    font-size:clamp(14px,1.6vw,20px);
+    color:var(--ink-dim);
+    margin-bottom:4px;
+  }
+  .timer-value{
+    font-size:clamp(40px,6vw,72px);
+    font-weight:bold;
+    color:var(--blue);
+    font-variant-numeric:tabular-nums;
+    transition:color .2s ease;
+  }
+  .timer-value.urgent{color:var(--coral);}
+  .timer-bar-track{
+    width:min(420px,80%);
+    height:10px;
+    background:var(--line);
+    border-radius:6px;
+    margin:10px auto 0;
+    overflow:hidden;
+  }
+  .timer-bar-fill{
+    height:100%;
+    background:var(--blue);
+    width:100%;
+    transition:width 1s linear, background .3s ease;
+  }
+  .timer-bar-fill.urgent{background:var(--coral);}
+
+  .prompt{
+    font-size:clamp(30px,5vw,64px);
+    font-weight:bold;
+    line-height:1.25;
+    margin:0 0 clamp(20px,3vh,40px) 0;
+  }
+  .prompt em{
+    font-style:normal;
+    color:var(--yellow);
+    text-decoration:underline;
+    text-decoration-style:wavy;
+    text-decoration-color:var(--blue);
+  }
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(14px,2vw,26px);
+    max-width:900px;
+    margin:0 auto;
+  }
+  .opt{
+    font-size:clamp(22px,2.6vw,34px);
+    background:var(--card);
+    border:3px solid var(--line);
+    border-radius:18px;
+    padding:clamp(14px,2vh,26px) clamp(16px,2vw,28px);
+    color:var(--ink);
+    cursor:pointer;
+    transition:transform .12s ease, border-color .12s ease, background .12s ease;
+    font-family:inherit;
+  }
+  .opt:hover{border-color:var(--blue); transform:translateY(-2px);}
+  .opt.selected{border-color:var(--blue); background:var(--line-soft);}
+  .opt.correct{background:var(--opt-bg-correct); border-color:var(--green); color:var(--ink); transform:scale(1.04);}
+  .opt.wrong{background:var(--opt-bg-wrong); border-color:var(--coral); opacity:0.7;}
+  .opt:disabled{cursor:default;}
+
+  .reveal-btn{
+    margin-top:clamp(22px,3.5vh,40px);
+    font-size:clamp(22px,2.6vw,32px);
+    background:var(--blue);
+    color:#062338;
+    border:none;
+    border-radius:14px;
+    padding:16px 46px;
+    font-weight:bold;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .reveal-btn:hover{background:#69B9EE;}
+
+  .answer-banner{margin-top:clamp(20px,3vh,34px); min-height:1.5em;}
+  .answer-banner .label{font-size:clamp(18px,2.2vw,26px); color:var(--ink-dim); margin-bottom:6px;}
+  .answer-banner .value{font-size:clamp(40px,7vw,84px); font-weight:bold; color:var(--yellow); line-height:1.15;}
+  .answer-banner .verdict{font-size:clamp(22px,3.2vw,34px); font-weight:bold; margin-top:10px;}
+  .answer-banner .verdict.right{color:var(--green);}
+  .answer-banner .verdict.wrong{color:var(--coral);}
+  .answer-banner .phrase{font-size:clamp(24px,3.4vw,40px); font-weight:bold; color:var(--blue); margin-top:calc(14px + env(safe-area-inset-top,0px));}
+
+  .divider-eyebrow{
+    display:inline-block;
+    font-size:clamp(18px,2.4vw,28px);
+    font-weight:bold;
+    letter-spacing:0.04em;
+    color:var(--blue);
+    border:2px solid var(--blue);
+    border-radius:999px;
+    padding:8px 26px;
+    margin-bottom:clamp(16px,2.6vh,28px);
+  }
+  .divider-title{font-size:clamp(40px,7vw,92px); font-weight:bold; color:var(--ink); margin-bottom:14px;}
+  .divider-sub{font-size:clamp(20px,3vw,32px); color:var(--ink-dim);}
+
+  .title-main{font-size:clamp(56px,10vw,140px); font-weight:bold; margin-bottom:14px; color:var(--ink);}
+  .title-sub{font-size:clamp(26px,4vw,48px); color:var(--blue); margin-bottom:14px;}
+  .title-note{font-size:clamp(20px,3vw,32px); color:var(--ink-dim); max-width:900px; margin:0 auto;}
+
+  .mode-title{font-size:clamp(34px,5.5vw,64px); font-weight:bold; margin-bottom:clamp(24px,4vh,50px);}
+  .mode-options{display:flex; gap:24px; justify-content:center; flex-wrap:wrap;}
+  .mode-btn{
+    font-size:clamp(22px,2.8vw,34px);
+    font-weight:bold;
+    background:var(--card);
+    border:3px solid var(--line);
+    border-radius:20px;
+    padding:clamp(24px,3.5vh,40px) clamp(30px,4vw,54px);
+    color:var(--ink);
+    cursor:pointer;
+    font-family:inherit;
+    min-width:280px;
+  }
+  .mode-btn:hover{border-color:var(--blue); transform:translateY(-2px);}
+  .mode-btn .sub{display:block; font-size:0.55em; color:var(--ink-dim); font-weight:normal; margin-top:8px;}
+
+  .goodluck-text{
+    font-size:clamp(64px,13vw,170px);
+    font-weight:bold;
+    color:var(--yellow);
+    margin-bottom:clamp(14px,2.5vh,28px);
+  }
+  .goodluck-note{
+    font-size:clamp(20px,3vw,32px);
+    color:var(--ink-dim);
+  }
+
+  .group-score-title{font-size:clamp(26px,3.6vw,44px); color:var(--ink-dim); margin-bottom:14px;}
+  .group-score-value{font-size:clamp(56px,9vw,110px); font-weight:bold; color:var(--yellow); margin-bottom:14px;}
+  .group-score-pct{font-size:clamp(22px,3vw,32px); color:var(--blue);}
+  .team-score-row{display:flex; gap:clamp(20px,4vw,60px); justify-content:center; flex-wrap:wrap; margin-top:10px;}
+  .team-score-col .name{font-size:clamp(20px,2.6vw,28px); font-weight:bold;}
+  .team-score-col.a .name{color:var(--blue);}
+  .team-score-col.b .name{color:var(--purple);}
+  .team-score-col .val{font-size:clamp(40px,6vw,66px); font-weight:bold; color:var(--yellow);}
+
+  .summary-heading{
+    font-size:clamp(28px,4vw,46px);
+    font-weight:bold;
+    color:var(--blue);
+    margin-bottom:clamp(18px,2.6vh,30px);
+    text-align:center;
+  }
+  .summary-choice{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:clamp(16px,2.4vh,26px);
+  }
+  .summary-btn{
+    font-size:clamp(20px,2.4vw,28px);
+    font-weight:bold;
+    background:var(--card);
+    border:3px solid var(--line);
+    border-radius:16px;
+    padding:16px 36px;
+    color:var(--ink);
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .summary-btn:hover{border-color:var(--blue);}
+  .summary-list{
+    list-style:none;
+    padding:0;
+    margin:clamp(10px,2vh,20px) auto 0;
+    max-width:900px;
+    text-align:left;
+  }
+  .summary-block{
+    margin-bottom:clamp(18px,2.6vh,28px);
+  }
+  .summary-block .rule-title{
+    font-size:clamp(21px,2.5vw,29px);
+    font-weight:bold;
+    color:var(--yellow);
+    margin-bottom:4px;
+  }
+  .summary-block .rule-text{
+    font-size:clamp(19px,2.3vw,26px);
+    line-height:1.5;
+    color:var(--ink);
+  }
+  .summary-block .rule-text em{
+    font-style:normal;
+    color:var(--blue);
+    font-weight:bold;
+  }
+  .rule-table{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:8px 22px;
+    margin-top:12px;
+  }
+  .rule-table .subj{
+    font-size:clamp(19px,2.2vw,26px);
+    color:var(--ink-dim);
+  }
+  .rule-table .form{
+    font-size:clamp(19px,2.2vw,26px);
+    color:var(--ink);
+    font-weight:bold;
+  }
+  .example-list{
+    margin-top:10px;
+  }
+  .example-list .example-line{
+    font-size:clamp(19px,2.3vw,26px);
+    color:var(--blue);
+    font-weight:bold;
+    line-height:1.6;
+  }
+
+  .final-total-label{font-size:clamp(22px,3vw,30px); color:var(--ink-dim); margin-bottom:6px;}
+  .final-total-value{font-size:clamp(64px,11vw,130px); font-weight:bold; color:var(--yellow); line-height:1; margin-bottom:10px;}
+  .final-message{font-size:clamp(22px,3.2vw,36px); color:var(--blue); font-weight:bold; margin:14px auto clamp(20px,3.5vh,40px); max-width:900px; line-height:1.35;}
+  .breakdown{max-width:820px; margin:0 auto; text-align:left;}
+  .breakdown-row{display:flex; justify-content:space-between; align-items:center; font-size:clamp(18px,2.4vw,26px); padding:10px 4px; border-bottom:1px solid var(--line);}
+  .breakdown-row .name{color:var(--ink);}
+  .breakdown-row .score{color:var(--yellow); font-weight:bold;}
+
+  .nav{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:clamp(10px,2vh,24px);
+  }
+  .navbtn{
+    font-size:clamp(16px,2vw,24px);
+    background:transparent;
+    color:var(--ink);
+    border:2px solid var(--line);
+    border-radius:12px;
+    padding:10px 28px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .navbtn:hover{border-color:var(--blue);}
+  .navbtn:disabled{opacity:0.3; cursor:default;}
+  .hint{font-size:clamp(13px,1.5vw,18px); color:var(--ink-dim);}
+
+  .theme-toggle{
+    position:fixed;
+    top:calc(14px + env(safe-area-inset-top,0px));
+    right:14px;
+    z-index:50;
+    font-size:clamp(13px,1.5vw,18px);
+    font-weight:bold;
+    background:var(--card);
+    color:var(--ink);
+    border:2px solid var(--line);
+    border-radius:999px;
+    padding:8px 20px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .theme-toggle:hover{border-color:var(--blue);}
+
+  .jump-select{
+    position:fixed;
+    top:calc(14px + env(safe-area-inset-top,0px));
+    left:14px;
+    z-index:50;
+    font-size:clamp(13px,1.5vw,18px);
+    font-weight:bold;
+    background:var(--card);
+    color:var(--ink);
+    border:2px solid var(--line);
+    border-radius:999px;
+    padding:8px 16px;
+    cursor:pointer;
+    font-family:inherit;
+    max-width:44vw;
+  }
+  .jump-select:hover{border-color:var(--blue);}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle">☀ Light mode</button>
+<select class="jump-select" id="jumpSelect"></select>
+
+<div class="wrap">
+  <div class="topbar" id="topbar">
+    <div class="section-tag" id="sectionTag">Intro</div>
+    <div class="progress" id="progress"></div>
+    <div class="score-chips" id="scoreChips"></div>
+    <div class="counter" id="counter">0 / 0</div>
+  </div>
+
+  <div class="stage" id="stage"></div>
+
+  <div class="nav">
+    <button class="navbtn" id="prevBtn">&larr; Previous</button>
+    <div class="hint" id="hint">Use the arrow keys or click the buttons</div>
+    <button class="navbtn" id="nextBtn">Next &rarr;</button>
+  </div>
+</div>
+
+<script>
+const TRANSPORT_SVG = "<svg viewBox=\"0 0 900 520\" role=\"img\" aria-label=\"On or in: transport chart\" style=\"width:100%;max-width:700px;min-width:520px;display:block;margin:0 auto clamp(18px,3vh,30px);\"><rect x=\"20\" y=\"10\" width=\"420\" height=\"70\" rx=\"14\" style=\"fill:rgba(245,200,76,0.18);stroke:var(--yellow);stroke-width:3\"/><rect x=\"460\" y=\"10\" width=\"420\" height=\"70\" rx=\"14\" style=\"fill:rgba(79,168,232,0.14);stroke:var(--blue);stroke-width:3\"/><text x=\"230\" y=\"60\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:40px;font-weight:bold;fill:var(--yellow);\">ON</text><text x=\"670\" y=\"60\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:40px;font-weight:bold;fill:var(--blue);\">IN</text><text x=\"90\" y=\"125\" text-anchor=\"middle\" style=\"font-size:38px;\">✈️</text><text x=\"140\" y=\"121\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a plane</text><text x=\"530\" y=\"125\" text-anchor=\"middle\" style=\"font-size:38px;\">🚗</text><text x=\"580\" y=\"121\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a car</text><text x=\"90\" y=\"187\" text-anchor=\"middle\" style=\"font-size:38px;\">🚢</text><text x=\"140\" y=\"183\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a ship</text><text x=\"530\" y=\"187\" text-anchor=\"middle\" style=\"font-size:38px;\">🚁</text><text x=\"580\" y=\"183\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a helicopter</text><text x=\"90\" y=\"249\" text-anchor=\"middle\" style=\"font-size:38px;\">🚌</text><text x=\"140\" y=\"245\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a bus</text><text x=\"530\" y=\"249\" text-anchor=\"middle\" style=\"font-size:38px;\">🚐</text><text x=\"580\" y=\"245\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a van</text><text x=\"90\" y=\"311\" text-anchor=\"middle\" style=\"font-size:38px;\">🚆</text><text x=\"140\" y=\"307\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a train</text><text x=\"530\" y=\"311\" text-anchor=\"middle\" style=\"font-size:38px;\">🚕</text><text x=\"580\" y=\"307\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a taxi</text><text x=\"90\" y=\"373\" text-anchor=\"middle\" style=\"font-size:38px;\">🚲</text><text x=\"140\" y=\"369\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a bicycle</text><text x=\"530\" y=\"373\" text-anchor=\"middle\" style=\"font-size:38px;\">🚘</text><text x=\"580\" y=\"369\" text-anchor=\"start\" style=\"fill:var(--ink);font-family:inherit;font-size:26px;font-weight:bold;\">a limo</text><line x1=\"450\" y1=\"95\" x2=\"450\" y2=\"420\" stroke=\"var(--line)\" stroke-width=\"3\"/><line x1=\"20\" y1=\"425\" x2=\"880\" y2=\"425\" stroke=\"var(--line)\" stroke-width=\"3\"/><text x=\"230\" y=\"465\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;fill:var(--ink-dim);\">You can stand up inside</text><text x=\"230\" y=\"495\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:18px;font-weight:bold;fill:var(--ink-dim);font-weight:normal;\">(or you sit on top of it)</text><text x=\"670\" y=\"465\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;fill:var(--ink-dim);\">You can't stand up inside</text></svg>";
+const PLACE_SVG = "<svg viewBox=\"0 0 880 390\" role=\"img\" aria-label=\"Prepositions of place pictures\" style=\"width:100%;max-width:820px;min-width:520px;display:block;margin:0 auto clamp(18px,3vh,30px);\"><rect x=\"6\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"70\" y=\"60\" width=\"80\" height=\"80\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><circle cx=\"110\" cy=\"110\" r=\"15\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><text x=\"110\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">in</text><rect x=\"226\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"265\" y=\"80\" width=\"130\" height=\"10\" rx=\"3\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><line x1=\"275\" y1=\"90\" x2=\"275\" y2=\"140\" stroke=\"var(--blue)\" stroke-width=\"4\"/><line x1=\"385\" y1=\"90\" x2=\"385\" y2=\"140\" stroke=\"var(--blue)\" stroke-width=\"4\"/><circle cx=\"330\" cy=\"65\" r=\"15\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><text x=\"330\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">on</text><rect x=\"446\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"485\" y=\"80\" width=\"130\" height=\"10\" rx=\"3\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><line x1=\"495\" y1=\"90\" x2=\"495\" y2=\"140\" stroke=\"var(--blue)\" stroke-width=\"4\"/><line x1=\"605\" y1=\"90\" x2=\"605\" y2=\"140\" stroke=\"var(--blue)\" stroke-width=\"4\"/><circle cx=\"550\" cy=\"125\" r=\"15\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><text x=\"550\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">under</text><rect x=\"666\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"705\" y=\"80\" width=\"130\" height=\"10\" rx=\"3\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><line x1=\"715\" y1=\"90\" x2=\"715\" y2=\"140\" stroke=\"var(--blue)\" stroke-width=\"4\"/><line x1=\"825\" y1=\"90\" x2=\"825\" y2=\"140\" stroke=\"var(--blue)\" stroke-width=\"4\"/><circle cx=\"770\" cy=\"30\" r=\"15\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><line x1=\"770\" y1=\"48\" x2=\"770\" y2=\"76\" stroke=\"var(--ink-dim)\" stroke-width=\"2\" stroke-dasharray=\"4 4\"/><text x=\"770\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">above</text><rect x=\"6\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"50\" y=\"275\" width=\"70\" height=\"60\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><circle cx=\"150\" cy=\"320\" r=\"15\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><text x=\"110\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">next to</text><rect x=\"226\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"245\" y=\"275\" width=\"55\" height=\"60\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><rect x=\"360\" y=\"275\" width=\"55\" height=\"60\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><circle cx=\"330\" cy=\"320\" r=\"15\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><text x=\"330\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">between</text><rect x=\"446\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"500\" y=\"255\" width=\"100\" height=\"80\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><circle cx=\"550\" cy=\"320\" r=\"22\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><text x=\"550\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">in front of</text><rect x=\"666\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><circle cx=\"785\" cy=\"257\" r=\"15\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:2\"/><rect x=\"720\" y=\"260\" width=\"100\" height=\"80\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><text x=\"770\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">behind</text></svg>";
+const MOVE_SVG_1 = "<svg viewBox=\"0 0 880 390\" role=\"img\" aria-label=\"Movement: to, from, into, out of, onto, off, up, down\" style=\"width:100%;max-width:820px;min-width:520px;display:block;margin:0 auto clamp(18px,3vh,30px);\"><rect x=\"6\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"120\" y=\"70\" width=\"70\" height=\"55\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M25 98 L110 98\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(110,98) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"110\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">to</text><rect x=\"226\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"245\" y=\"70\" width=\"70\" height=\"55\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M320 98 L410 98\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(410,98) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"330\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">from</text><rect x=\"446\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"550\" y=\"80\" width=\"70\" height=\"55\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M470 120 Q520 30 580 110\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(580,110) rotate(53)\" style=\"fill:var(--yellow)\"/><text x=\"550\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">into</text><rect x=\"666\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"690\" y=\"80\" width=\"70\" height=\"55\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M725 110 Q780 30 850 130\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(850,130) rotate(55)\" style=\"fill:var(--yellow)\"/><text x=\"770\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">out of</text><rect x=\"6\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"110\" y=\"290\" width=\"80\" height=\"45\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M30 335 Q90 225 150 285\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(150,285) rotate(45)\" style=\"fill:var(--yellow)\"/><text x=\"110\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">onto</text><rect x=\"226\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"245\" y=\"290\" width=\"80\" height=\"45\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M285 280 Q360 225 400 335\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(400,335) rotate(70)\" style=\"fill:var(--yellow)\"/><text x=\"330\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">off</text><rect x=\"446\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><path d=\"M460 340 L550 240 L640 340 Z\" style=\"fill:var(--green);fill-opacity:0.5\"/><path d=\"M480 325 L540 257\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(540,257) rotate(-49)\" style=\"fill:var(--yellow)\"/><text x=\"550\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">up</text><rect x=\"666\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><path d=\"M680 340 L770 240 L860 340 Z\" style=\"fill:var(--green);fill-opacity:0.5\"/><path d=\"M780 257 L840 325\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(840,325) rotate(49)\" style=\"fill:var(--yellow)\"/><text x=\"770\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">down</text></svg>";
+const MOVE_SVG_2 = "<svg viewBox=\"0 0 880 390\" role=\"img\" aria-label=\"Movement: across, through, over, under, along, past, around, towards\" style=\"width:100%;max-width:820px;min-width:520px;display:block;margin:0 auto clamp(18px,3vh,30px);\"><rect x=\"6\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"15\" y=\"70\" width=\"190\" height=\"45\" style=\"fill:#4A5563\"/><path d=\"M110 140 L110 45\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(110,45) rotate(-90)\" style=\"fill:var(--yellow)\"/><text x=\"110\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">across</text><rect x=\"226\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><path d=\"M280 145 L330 40 L380 145 Z\" style=\"fill:#7C6A58\"/><path d=\"M240 125 L415 125\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(415,125) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"330\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">through</text><rect x=\"446\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><line x1=\"525\" y1=\"95\" x2=\"525\" y2=\"145\" style=\"stroke:#8A5F33;stroke-width:7;stroke-linecap:round;\"/><line x1=\"575\" y1=\"95\" x2=\"575\" y2=\"145\" style=\"stroke:#8A5F33;stroke-width:7;stroke-linecap:round;\"/><line x1=\"515\" y1=\"108\" x2=\"585\" y2=\"108\" style=\"stroke:#B9864F;stroke-width:6;stroke-linecap:round;\"/><line x1=\"515\" y1=\"128\" x2=\"585\" y2=\"128\" style=\"stroke:#B9864F;stroke-width:6;stroke-linecap:round;\"/><path d=\"M470 140 Q550 0 630 140\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(630,140) rotate(60)\" style=\"fill:var(--yellow)\"/><text x=\"550\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">over</text><rect x=\"666\" y=\"6\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><path d=\"M700 50 L840 50 L840 145 L820 145 Q770 80 720 145 L700 145 Z\" style=\"fill:#8E8E8E\"/><path d=\"M675 135 L865 135\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(865,135) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"770\" y=\"175\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">under</text><rect x=\"6\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"15\" y=\"255\" width=\"190\" height=\"35\" style=\"fill:rgba(79,168,232,0.35)\"/><path d=\"M20 310 L200 310\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(200,310) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"110\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">along</text><rect x=\"226\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"295\" y=\"240\" width=\"70\" height=\"55\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M240 320 L420 320\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(420,320) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"330\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">past</text><rect x=\"446\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"520\" y=\"265\" width=\"60\" height=\"45\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><ellipse cx=\"550\" cy=\"287\" rx=\"80\" ry=\"45\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(550,332) rotate(180)\" style=\"fill:var(--yellow)\"/><text x=\"550\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">around</text><rect x=\"666\" y=\"201\" width=\"208\" height=\"183\" rx=\"14\" style=\"fill:none;stroke:var(--line);stroke-width:2\"/><rect x=\"805\" y=\"265\" width=\"55\" height=\"55\" rx=\"5\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><path d=\"M680 293 L745 293\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(745,293) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"770\" y=\"370\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">towards</text></svg>";
+const groups = [{"id": "transport", "label": "Part One: Transport", "points": 40}, {"id": "movement", "label": "Part Two: Prepositions of movement", "points": 40}, {"id": "mixed", "label": "Part Three: Mixed review", "points": 20}];
+const slides = [
+ {
+  "type": "title",
+  "main": "Prepositions Quiz 2",
+  "sub": "Transport and movement",
+  "note": "50 questions, 2 points each. Can you get 100?"
+ },
+ {
+  "type": "mode"
+ },
+ {
+  "type": "goodluck"
+ },
+ {
+  "type": "divider",
+  "section": "Part One",
+  "title": "Transport",
+  "sub": "in, on, by and on foot"
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "My sister is sitting <em>___</em> the car with Dad.",
+  "options": [
+   "on",
+   "at",
+   "to",
+   "in"
+  ],
+  "correct": 3
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "I'm <em>___</em> the bus to school.",
+  "options": [
+   "on",
+   "in",
+   "at",
+   "to"
+  ],
+  "correct": 0
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "They are <em>___</em> a taxi to the station.",
+  "options": [
+   "to",
+   "in",
+   "on",
+   "at"
+  ],
+  "correct": 1
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "She rides to school <em>___</em> her bike.",
+  "options": [
+   "at",
+   "to",
+   "on",
+   "in"
+  ],
+  "correct": 2
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "The doctor arrives <em>___</em> a helicopter.",
+  "options": [
+   "on",
+   "at",
+   "to",
+   "in"
+  ],
+  "correct": 3
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "We're <em>___</em> the train to Porto.",
+  "options": [
+   "on",
+   "in",
+   "at",
+   "to"
+  ],
+  "correct": 0
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "The famous actress arrives <em>___</em> a limo.",
+  "options": [
+   "to",
+   "in",
+   "on",
+   "at"
+  ],
+  "correct": 1
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "The builder carries his tools <em>___</em> his van.",
+  "options": [
+   "at",
+   "to",
+   "in",
+   "on"
+  ],
+  "correct": 2
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "We're <em>___</em> the plane to London. Fasten your seat belts!",
+  "options": [
+   "in",
+   "at",
+   "to",
+   "on"
+  ],
+  "correct": 3
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "My grandparents are <em>___</em> a ship in the Mediterranean.",
+  "options": [
+   "on",
+   "in",
+   "at",
+   "to"
+  ],
+  "correct": 0
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "The man rides to work <em>___</em> his motorbike.",
+  "options": [
+   "to",
+   "on",
+   "in",
+   "at"
+  ],
+  "correct": 1
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "The cowboy rides <em>___</em> his horse.",
+  "options": [
+   "at",
+   "to",
+   "on",
+   "in"
+  ],
+  "correct": 2
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "I go to school <em>___</em> bus.",
+  "options": [
+   "in",
+   "on",
+   "with",
+   "by"
+  ],
+  "correct": 3
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "My mum goes to work <em>___</em> car.",
+  "options": [
+   "by",
+   "in",
+   "on",
+   "with"
+  ],
+  "correct": 0
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "We travel to the islands <em>___</em> boat.",
+  "options": [
+   "with",
+   "by",
+   "in",
+   "on"
+  ],
+  "correct": 1
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "It's very close, so we go <em>___</em> foot.",
+  "options": [
+   "in",
+   "with",
+   "on",
+   "by"
+  ],
+  "correct": 2
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "Which sentence is <em>correct</em>?",
+  "options": [
+   "I go to school by the bus.",
+   "I go to school in bus.",
+   "I go to school on bus.",
+   "I go to school by bus."
+  ],
+  "correct": 3
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "Which sentence is <em>correct</em>?",
+  "options": [
+   "We go to the park on foot.",
+   "We go to the park by foot.",
+   "We go to the park in foot.",
+   "We go to the park at foot."
+  ],
+  "correct": 0
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "Why do we say <em>on</em> a train?",
+  "options": [
+   "It has four wheels.",
+   "You can stand up inside it.",
+   "You can't stand up inside it.",
+   "It is very small."
+  ],
+  "correct": 1
+ },
+ {
+  "type": "mc",
+  "section": "Part One",
+  "group": "transport",
+  "points": 2,
+  "prompt": "Why do we say <em>in</em> a car?",
+  "options": [
+   "It is very big.",
+   "It has lots of seats.",
+   "You can't stand up inside it.",
+   "You can stand up inside it."
+  ],
+  "correct": 2
+ },
+ {
+  "type": "groupresult",
+  "group": "transport"
+ },
+ {
+  "type": "summary",
+  "section": "Part One",
+  "group": "transport",
+  "clusterId": "transport-explain",
+  "explain": [
+   {
+    "title": "ON or IN?",
+    "text": "Ask yourself: can I stand up and walk around inside? Do I sit on top?"
+   }
+  ],
+  "first": true,
+  "svg": TRANSPORT_SVG
+ },
+ {
+  "type": "summary",
+  "section": "Part One",
+  "group": "transport",
+  "clusterId": "transport-explain",
+  "explain": [
+   {
+    "title": "The rule",
+    "text": "Look at the size of the vehicle and where you sit.",
+    "table": [
+     [
+      "on",
+      "big vehicles: you can stand up and walk around (bus, train, plane, ship)"
+     ],
+     [
+      "on",
+      "you sit on top (bicycle, motorbike, horse, scooter)"
+     ],
+     [
+      "in",
+      "small vehicles: you sit inside and can't stand up (car, taxi, van, helicopter, limo)"
+     ]
+    ],
+    "examples": [
+     "We're on the bus.",
+     "Tom is on his bike.",
+     "My dad is in the car."
+    ]
+   }
+  ]
+ },
+ {
+  "type": "summary",
+  "section": "Part One",
+  "group": "transport",
+  "clusterId": "transport-explain",
+  "explain": [
+   {
+    "title": "Watch out: boats",
+    "text": "With boats, the size changes the preposition.",
+    "table": [
+     [
+      "in a boat",
+      "a small boat: a rowing boat, a canoe"
+     ],
+     [
+      "on a boat / on a ship",
+      "a big boat: you can walk around on it"
+     ]
+    ],
+    "examples": [
+     "We're in a little rowing boat on the lake.",
+     "We're on a ship to Madeira."
+    ]
+   }
+  ]
+ },
+ {
+  "type": "summary",
+  "section": "Part One",
+  "group": "transport",
+  "clusterId": "transport-explain",
+  "explain": [
+   {
+    "title": "by + transport",
+    "text": "To say <em>how</em> you travel, use <em>by</em> with no <i>a</i>, <i>the</i> or <i>my</i>.",
+    "table": [
+     [
+      "by bus",
+      "on the bus"
+     ],
+     [
+      "by car",
+      "in my car"
+     ],
+     [
+      "by train",
+      "on a train"
+     ],
+     [
+      "by boat",
+      "on a boat"
+     ]
+    ],
+    "examples": [
+     "I go to school by bus.",
+     "I go to school on the bus."
+    ]
+   }
+  ]
+ },
+ {
+  "type": "summary",
+  "section": "Part One",
+  "group": "transport",
+  "clusterId": "transport-explain",
+  "explain": [
+   {
+    "title": "Walking: on foot",
+    "text": "When you walk, say <em>on foot</em>. Never say <i>by foot</i>.",
+    "examples": [
+     "We go to the park on foot.",
+     "It's close, so I go to school on foot."
+    ]
+   }
+  ]
+ },
+ {
+  "type": "divider",
+  "section": "Part Two",
+  "title": "Movement",
+  "sub": "Where are you going?"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "Every morning I walk <em>___</em> school.",
+  "options": [
+   "into",
+   "off",
+   "to",
+   "from"
+  ],
+  "correct": 2,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A house and a school\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><path d=\"M20 118 L85.0 68 L150 118 Z\" style=\"fill:var(--coral);stroke:var(--coral);stroke-width:3;stroke-linejoin:round\"/><rect x=\"30\" y=\"118\" width=\"110\" height=\"85\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><rect x=\"71.0\" y=\"153\" width=\"28\" height=\"50\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><text x=\"85.0\" y=\"140\" text-anchor=\"middle\" style=\"fill:var(--ink-dim);font-family:inherit;font-size:15px;font-weight:bold;\">home</text><rect x=\"250\" y=\"103\" width=\"130\" height=\"100\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><rect x=\"250\" y=\"79\" width=\"130\" height=\"26\" rx=\"4\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><text x=\"315.0\" y=\"98\" text-anchor=\"middle\" style=\"fill:#062338;font-family:inherit;font-size:16px;font-weight:bold;\">SCHOOL</text><rect x=\"300.0\" y=\"155\" width=\"30\" height=\"48\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><g transform=\"translate(150,0) scale(-1,1)\"><text x=\"0\" y=\"200\" text-anchor=\"middle\" style=\"font-size:44px;\">🚶</text></g><path d=\"M175 185 L238 185\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(238,185) rotate(0)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "My cousin is coming <em>___</em> Brazil to visit us in Portugal.",
+  "options": [
+   "to",
+   "into",
+   "onto",
+   "from"
+  ],
+  "correct": 3,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"Brazil and Portugal\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"60\" width=\"130\" height=\"90\" rx=\"12\" style=\"fill:var(--card);stroke:var(--green);stroke-width:3;\"/><text x=\"85\" y=\"112\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:22px;font-weight:bold;\">BRAZIL</text><rect x=\"250\" y=\"60\" width=\"130\" height=\"90\" rx=\"12\" style=\"fill:var(--card);stroke:var(--coral);stroke-width:3;\"/><text x=\"315\" y=\"112\" text-anchor=\"middle\" style=\"fill:var(--ink);font-family:inherit;font-size:20px;font-weight:bold;\">PORTUGAL</text><text x=\"200\" y=\"90\" text-anchor=\"middle\" style=\"font-size:40px;\">✈️</text><path d=\"M155 120 Q200 150 240 120\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(240,120) rotate(-37)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The cat jumped <em>___</em> the box.",
+  "options": [
+   "into",
+   "onto",
+   "out of",
+   "across"
+  ],
+  "correct": 0,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A cat and an open box\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><rect x=\"220\" y=\"120\" width=\"120\" height=\"83\" rx=\"4\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><line x1=\"220\" y1=\"120\" x2=\"195\" y2=\"95\" style=\"stroke:var(--blue);stroke-width:4;stroke-linecap:round;\"/><line x1=\"340\" y1=\"120\" x2=\"365\" y2=\"95\" style=\"stroke:var(--blue);stroke-width:4;stroke-linecap:round;\"/><g transform=\"translate(80,0) scale(-1,1)\"><text x=\"0\" y=\"200\" text-anchor=\"middle\" style=\"font-size:56px;\">🐈</text></g><path d=\"M110 150 Q190 20 275 145\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(275,145) rotate(56)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The dog ran <em>___</em> the house and into the garden.",
+  "options": [
+   "up",
+   "out of",
+   "into",
+   "onto"
+  ],
+  "correct": 1,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A dog, a house and a garden\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><rect x=\"20\" y=\"198\" width=\"360\" height=\"8\" style=\"fill:var(--green)\"/><path d=\"M20 93 L95.0 43 L170 93 Z\" style=\"fill:var(--coral);stroke:var(--coral);stroke-width:3;stroke-linejoin:round\"/><rect x=\"30\" y=\"93\" width=\"130\" height=\"110\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><rect x=\"81.0\" y=\"153\" width=\"28\" height=\"50\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><g transform=\"translate(95,0) scale(-1,1)\"><text x=\"0\" y=\"200\" text-anchor=\"middle\" style=\"font-size:40px;\">🐕</text></g><text x=\"340\" y=\"200\" text-anchor=\"middle\" style=\"font-size:34px;\">🌼</text><path d=\"M125 180 L300 180\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(300,180) rotate(0)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The dog jumped <em>___</em> the sofa.",
+  "options": [
+   "off",
+   "through",
+   "onto",
+   "into"
+  ],
+  "correct": 2,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A dog and a sofa\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><rect x=\"150\" y=\"95\" width=\"200\" height=\"50\" rx=\"14\" style=\"fill:var(--purple);stroke:var(--purple);stroke-width:3;\"/><rect x=\"140\" y=\"140\" width=\"220\" height=\"42\" rx=\"10\" style=\"fill:var(--purple);stroke:var(--purple);stroke-width:3;\"/><rect x=\"130\" y=\"120\" width=\"30\" height=\"62\" rx=\"10\" style=\"fill:var(--purple);stroke:var(--purple);stroke-width:3;\"/><rect x=\"340\" y=\"120\" width=\"30\" height=\"62\" rx=\"10\" style=\"fill:var(--purple);stroke:var(--purple);stroke-width:3;\"/><line x1=\"155\" y1=\"182\" x2=\"155\" y2=\"203\" style=\"stroke:var(--ink-dim);stroke-width:5;stroke-linecap:round;\"/><line x1=\"345\" y1=\"182\" x2=\"345\" y2=\"203\" style=\"stroke:var(--ink-dim);stroke-width:5;stroke-linecap:round;\"/><g transform=\"translate(55,0) scale(-1,1)\"><text x=\"0\" y=\"200\" text-anchor=\"middle\" style=\"font-size:50px;\">🐕</text></g><path d=\"M75 150 Q140 40 230 138\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(230,138) rotate(47)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The cat jumped <em>___</em> the table and landed on the floor.",
+  "options": [
+   "onto",
+   "into",
+   "up",
+   "off"
+  ],
+  "correct": 3,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A cat on a table\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><rect x=\"60\" y=\"110\" width=\"170\" height=\"12\" rx=\"3\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><line x1=\"74\" y1=\"122\" x2=\"74\" y2=\"205\" style=\"stroke:var(--blue);stroke-width:4;stroke-linecap:round;\"/><line x1=\"216\" y1=\"122\" x2=\"216\" y2=\"205\" style=\"stroke:var(--blue);stroke-width:4;stroke-linecap:round;\"/><text x=\"145\" y=\"110\" text-anchor=\"middle\" style=\"font-size:50px;\">🐈</text><path d=\"M190 85 Q300 40 330 190\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(330,190) rotate(79)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The children are climbing <em>___</em> the hill.",
+  "options": [
+   "up",
+   "down",
+   "into",
+   "off"
+  ],
+  "correct": 0,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"Children and a hill\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><path d=\"M20 205 Q120 205 200 70 Q280 205 380 205 Z\" style=\"fill:var(--green);fill-opacity:0.55;stroke:var(--green);stroke-width:3\"/><line x1=\"200\" y1=\"72\" x2=\"200\" y2=\"30\" style=\"stroke:var(--ink);stroke-width:3\"/><path d=\"M200 30 L228 40 L200 50 Z\" style=\"fill:var(--coral)\"/><text x=\"55\" y=\"200\" text-anchor=\"middle\" style=\"font-size:36px;\">🧒</text><text x=\"85\" y=\"200\" text-anchor=\"middle\" style=\"font-size:36px;\">👧</text><path d=\"M110 180 Q150 160 185 95\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(185,95) rotate(-62)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The ball is rolling <em>___</em> the hill.",
+  "options": [
+   "onto",
+   "down",
+   "up",
+   "into"
+  ],
+  "correct": 1,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A ball on a hill\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><path d=\"M20 205 Q120 205 200 70 Q280 205 380 205 Z\" style=\"fill:var(--green);fill-opacity:0.55;stroke:var(--green);stroke-width:3\"/><circle cx=\"200\" cy=\"56\" r=\"14\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:3\"/><path d=\"M218 80 Q250 150 330 190\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(330,190) rotate(27)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "Look left and right before you walk <em>___</em> the road.",
+  "options": [
+   "into",
+   "up",
+   "across",
+   "through"
+  ],
+  "correct": 2,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A road with a zebra crossing\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"60\" width=\"400\" height=\"95\" style=\"fill:#4A5563\"/><line x1=\"0\" y1=\"107\" x2=\"400\" y2=\"107\" style=\"stroke:#F1F5F9;stroke-width:3;stroke-linecap:round;stroke-dasharray:22 18\"/><rect x=\"165\" y=\"64\" width=\"70\" height=\"10\" style=\"fill:#F1F5F9\"/><rect x=\"165\" y=\"82\" width=\"70\" height=\"10\" style=\"fill:#F1F5F9\"/><rect x=\"165\" y=\"100\" width=\"70\" height=\"10\" style=\"fill:#F1F5F9\"/><rect x=\"165\" y=\"118\" width=\"70\" height=\"10\" style=\"fill:#F1F5F9\"/><rect x=\"165\" y=\"136\" width=\"70\" height=\"10\" style=\"fill:#F1F5F9\"/><text x=\"200\" y=\"210\" text-anchor=\"middle\" style=\"font-size:40px;\">🚶</text><path d=\"M200 168 L200 45\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(200,45) rotate(-90)\" style=\"fill:var(--yellow)\"/><text x=\"60\" y=\"105\" text-anchor=\"middle\" style=\"font-size:40px;\">🚗</text></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The train goes <em>___</em> the tunnel.",
+  "options": [
+   "across",
+   "onto",
+   "up",
+   "through"
+  ],
+  "correct": 3,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A train and a tunnel in a mountain\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><path d=\"M110 205 L200 45 L290 205 Z\" style=\"fill:#7C6A58;stroke:#5E4F40;stroke-width:3\"/><path d=\"M168 205 L168 165 Q200 135 232 165 L232 205 Z\" style=\"fill:#1B1B1B\"/><path d=\"M168 205 L168 165 Q200 135 232 165 L232 205 Z\" style=\"fill:#1B1B1B\"/><text x=\"60\" y=\"200\" text-anchor=\"middle\" style=\"font-size:50px;\">🚆</text><path d=\"M95 185 L330 185\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(330,185) rotate(0)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "We walked <em>___</em> the river and looked at the ducks.",
+  "options": [
+   "along",
+   "across",
+   "into",
+   "up"
+  ],
+  "correct": 0,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A river, ducks and a path\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"40\" width=\"400\" height=\"80\" style=\"fill:rgba(79,168,232,0.35)\"/><rect x=\"0\" y=\"125\" width=\"400\" height=\"30\" style=\"fill:#B9864F;fill-opacity:0.55\"/><text x=\"120\" y=\"95\" text-anchor=\"middle\" style=\"font-size:34px;\">🦆</text><text x=\"260\" y=\"90\" text-anchor=\"middle\" style=\"font-size:30px;\">🦆</text><g transform=\"translate(45,0) scale(-1,1)\"><text x=\"0\" y=\"195\" text-anchor=\"middle\" style=\"font-size:36px;\">🚶</text></g><path d=\"M75 142 L360 142\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(360,142) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"200\" y=\"195\" text-anchor=\"middle\" style=\"fill:var(--ink-dim);font-family:inherit;font-size:15px;font-weight:normal;\">the path by the river</text></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The horse jumped <em>___</em> the fence.",
+  "options": [
+   "into",
+   "over",
+   "under",
+   "through"
+  ],
+  "correct": 1,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A horse and a fence\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><line x1=\"140\" y1=\"140\" x2=\"260\" y2=\"140\" style=\"stroke:#B9864F;stroke-width:6;stroke-linecap:round;\"/><line x1=\"140\" y1=\"170\" x2=\"260\" y2=\"170\" style=\"stroke:#B9864F;stroke-width:6;stroke-linecap:round;\"/><line x1=\"145\" y1=\"120\" x2=\"145\" y2=\"203\" style=\"stroke:#8A5F33;stroke-width:7;stroke-linecap:round;\"/><line x1=\"200\" y1=\"120\" x2=\"200\" y2=\"203\" style=\"stroke:#8A5F33;stroke-width:7;stroke-linecap:round;\"/><line x1=\"255\" y1=\"120\" x2=\"255\" y2=\"203\" style=\"stroke:#8A5F33;stroke-width:7;stroke-linecap:round;\"/><g transform=\"translate(65,0) scale(-1,1)\"><text x=\"0\" y=\"200\" text-anchor=\"middle\" style=\"font-size:60px;\">🐎</text></g><path d=\"M100 120 Q200 -10 310 150\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(310,150) rotate(55)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The boat is sailing <em>___</em> the bridge.",
+  "options": [
+   "onto",
+   "into",
+   "under",
+   "over"
+  ],
+  "correct": 2,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A boat and a bridge\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"150\" width=\"400\" height=\"70\" style=\"fill:rgba(79,168,232,0.35)\"/><path d=\"M60 60 L340 60 L340 205 L310 205 L310 150 Q200 70 90 150 L90 205 L60 205 Z\" style=\"fill:#8E8E8E;stroke:#6B6B6B;stroke-width:3\"/><text x=\"40\" y=\"175\" text-anchor=\"middle\" style=\"font-size:44px;\">⛵</text><path d=\"M70 168 L355 168\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(355,168) rotate(0)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The bus goes <em>___</em> my school, but it doesn't stop there.",
+  "options": [
+   "through",
+   "into",
+   "onto",
+   "past"
+  ],
+  "correct": 3,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A bus, a road and a school\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"150\" width=\"400\" height=\"55\" style=\"fill:#4A5563\"/><rect x=\"135\" y=\"63\" width=\"130\" height=\"85\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><rect x=\"135\" y=\"39\" width=\"130\" height=\"26\" rx=\"4\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><text x=\"200.0\" y=\"58\" text-anchor=\"middle\" style=\"fill:#062338;font-family:inherit;font-size:16px;font-weight:bold;\">SCHOOL</text><rect x=\"185.0\" y=\"100\" width=\"30\" height=\"48\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><text x=\"350\" y=\"198\" text-anchor=\"middle\" style=\"font-size:50px;\">🚌</text><path d=\"M318 178 L45 178\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(45,178) rotate(180)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The dog is running <em>___</em> me! It wants to play.",
+  "options": [
+   "towards",
+   "from",
+   "off",
+   "through"
+  ],
+  "correct": 0,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A dog and me\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><circle cx=\"70\" cy=\"140.0\" r=\"13.0\" style=\"fill:var(--yellow);stroke:var(--blue);stroke-width:3\"/><rect x=\"58.0\" y=\"153.0\" width=\"24.0\" height=\"50.0\" rx=\"8.0\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:2;\"/><text x=\"70\" y=\"85\" text-anchor=\"middle\" style=\"fill:var(--yellow);font-family:inherit;font-size:20px;font-weight:bold;\">me</text><text x=\"320\" y=\"200\" text-anchor=\"middle\" style=\"font-size:56px;\">🐕</text><path d=\"M285 175 L115 175\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(115,175) rotate(180)\" style=\"fill:var(--yellow)\"/><text x=\"320\" y=\"120\" text-anchor=\"middle\" style=\"fill:var(--coral);font-family:inherit;font-size:30px;font-weight:bold;\">♥</text></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The children are running <em>___</em> the tree.",
+  "options": [
+   "into",
+   "around",
+   "through",
+   "onto"
+  ],
+  "correct": 1,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"Children and a tree\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><rect x=\"190\" y=\"120\" width=\"20\" height=\"83\" rx=\"4\" style=\"fill:#8B5A3C;stroke:#6B4429;stroke-width:2;\"/><circle cx=\"200\" cy=\"90\" r=\"45\" style=\"fill:var(--green)\"/><ellipse cx=\"200\" cy=\"175\" rx=\"150\" ry=\"28\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(200,203) rotate(180)\" style=\"fill:var(--yellow)\"/><text x=\"320\" y=\"170\" text-anchor=\"middle\" style=\"font-size:36px;\">🧒</text><text x=\"90\" y=\"170\" text-anchor=\"middle\" style=\"font-size:36px;\">👧</text></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "My mum is taking the shopping bags <em>___</em> the car.",
+  "options": [
+   "onto",
+   "up",
+   "out of",
+   "off"
+  ],
+  "correct": 2,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A car, shopping bags and a house\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><path d=\"M255 118 L320.0 68 L385 118 Z\" style=\"fill:var(--coral);stroke:var(--coral);stroke-width:3;stroke-linejoin:round\"/><rect x=\"265\" y=\"118\" width=\"110\" height=\"85\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><rect x=\"306.0\" y=\"153\" width=\"28\" height=\"50\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><text x=\"95\" y=\"203\" text-anchor=\"middle\" style=\"font-size:120px;\">🚗</text><circle cx=\"215\" cy=\"143.15\" r=\"12.35\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:3\"/><rect x=\"203.6\" y=\"155.5\" width=\"22.799999999999997\" height=\"47.5\" rx=\"7.6\" style=\"fill:var(--coral);stroke:var(--coral);stroke-width:2;\"/><text x=\"185\" y=\"203\" text-anchor=\"middle\" style=\"font-size:34px;\">🛍️</text><text x=\"245\" y=\"203\" text-anchor=\"middle\" style=\"font-size:34px;\">🛍️</text><path d=\"M120 135 Q150 80 178 168\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(178,168) rotate(72)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "This is my stop. I need to get <em>___</em> the bus.",
+  "options": [
+   "into",
+   "onto",
+   "up",
+   "off"
+  ],
+  "correct": 3,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A bus and a bus stop\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><text x=\"125\" y=\"203\" text-anchor=\"middle\" style=\"font-size:140px;\">🚌</text><line x1=\"330\" y1=\"203\" x2=\"330\" y2=\"90\" style=\"stroke:var(--ink-dim);stroke-width:4;stroke-linecap:round;\"/><rect x=\"300\" y=\"60\" width=\"60\" height=\"40\" rx=\"6\" style=\"fill:var(--green);stroke:var(--green);stroke-width:3;\"/><text x=\"330\" y=\"78\" text-anchor=\"middle\" style=\"fill:#062338;font-family:inherit;font-size:13px;font-weight:bold;\">BUS</text><text x=\"330\" y=\"93\" text-anchor=\"middle\" style=\"fill:#062338;font-family:inherit;font-size:13px;font-weight:bold;\">STOP</text><path d=\"M200 180 L285 180\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(285,180) rotate(0)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "Quick! Get <em>___</em> the taxi, it's raining!",
+  "options": [
+   "into",
+   "onto",
+   "off",
+   "across"
+  ],
+  "correct": 0,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A taxi, rain and a person\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><text x=\"250\" y=\"203\" text-anchor=\"middle\" style=\"font-size:130px;\">🚕</text><text x=\"70\" y=\"60\" text-anchor=\"middle\" style=\"font-size:56px;\">🌧️</text><circle cx=\"70\" cy=\"140.0\" r=\"13.0\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:3\"/><rect x=\"58.0\" y=\"153.0\" width=\"24.0\" height=\"50.0\" rx=\"8.0\" style=\"fill:var(--coral);stroke:var(--coral);stroke-width:2;\"/><path d=\"M100 160 L185 160\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(185,160) rotate(0)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Two",
+  "group": "movement",
+  "points": 2,
+  "prompt": "The passengers are getting <em>___</em> the plane. Have a good flight!",
+  "options": [
+   "out",
+   "on",
+   "in",
+   "off"
+  ],
+  "correct": 1,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A plane on the ground with steps\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><rect x=\"150\" y=\"95\" width=\"225\" height=\"52\" rx=\"26\" style=\"fill:#E8EEF4;stroke:var(--ink-dim);stroke-width:3\"/><path d=\"M340 97 L372 45 L388 45 L380 100 Z\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:2;stroke-linejoin:round\"/><path d=\"M235 135 L300 135 L330 165 L290 165 Z\" style=\"fill:#C9D3DD;stroke:var(--ink-dim);stroke-width:2\"/><circle cx=\"215\" cy=\"113\" r=\"6\" style=\"fill:var(--blue)\"/><circle cx=\"240\" cy=\"113\" r=\"6\" style=\"fill:var(--blue)\"/><circle cx=\"265\" cy=\"113\" r=\"6\" style=\"fill:var(--blue)\"/><circle cx=\"290\" cy=\"113\" r=\"6\" style=\"fill:var(--blue)\"/><circle cx=\"315\" cy=\"113\" r=\"6\" style=\"fill:var(--blue)\"/><rect x=\"178\" y=\"104\" width=\"22\" height=\"38\" rx=\"4\" style=\"fill:var(--coral)\"/><line x1=\"200\" y1=\"147\" x2=\"200\" y2=\"190\" style=\"stroke:var(--ink-dim);stroke-width:4;stroke-linecap:round;\"/><circle cx=\"200\" cy=\"195\" r=\"9\" style=\"fill:#2A2A2A\"/><line x1=\"320\" y1=\"147\" x2=\"320\" y2=\"190\" style=\"stroke:var(--ink-dim);stroke-width:4;stroke-linecap:round;\"/><circle cx=\"320\" cy=\"195\" r=\"9\" style=\"fill:#2A2A2A\"/><path d=\"M95 203 L95 192 L112 192 L112 178 L129 178 L129 164 L146 164 L146 150 L163 150 L163 142 L178 142 L178 203 Z\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3\"/><circle cx=\"50\" cy=\"146.3\" r=\"11.700000000000001\" style=\"fill:var(--yellow);stroke:var(--purple);stroke-width:3\"/><rect x=\"39.2\" y=\"158.0\" width=\"21.6\" height=\"45.0\" rx=\"7.2\" style=\"fill:var(--purple);stroke:var(--purple);stroke-width:2;\"/><path d=\"M75 160 L165 120\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(165,120) rotate(-24)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "groupresult",
+  "group": "movement"
+ },
+ {
+  "type": "summary",
+  "section": "Part Two",
+  "group": "movement",
+  "clusterId": "movement-explain",
+  "explain": [
+   {
+    "title": "Movement words (1)",
+    "text": "These words show the <em>direction</em> you move in.",
+    "examples": [
+     "I walk to school.",
+     "The cat jumped into the box.",
+     "The dog jumped onto the sofa.",
+     "We climb up the hill."
+    ]
+   }
+  ],
+  "first": true,
+  "svg": MOVE_SVG_1
+ },
+ {
+  "type": "summary",
+  "section": "Part Two",
+  "group": "movement",
+  "clusterId": "movement-explain",
+  "explain": [
+   {
+    "title": "Movement words (2)",
+    "text": "<em>to</em> = you arrive there. <em>towards</em> = you go in that direction, but you don't arrive yet.",
+    "examples": [
+     "Walk across the road.",
+     "The train goes through the tunnel.",
+     "The horse jumped over the fence.",
+     "The dog is running towards me."
+    ]
+   }
+  ],
+  "svg": MOVE_SVG_2
+ },
+ {
+  "type": "summary",
+  "section": "Part Two",
+  "group": "movement",
+  "clusterId": "movement-explain",
+  "explain": [
+   {
+    "title": "Getting in and out of transport",
+    "text": "Remember the transport rule: stand up inside → <em>on / off</em>. Can't stand up inside → <em>in(to) / out of</em>.",
+    "table": [
+     [
+      "bus, train, plane, bike",
+      "get on / get off"
+     ],
+     [
+      "car, taxi, van",
+      "get into / get out of"
+     ]
+    ],
+    "examples": [
+     "This is my stop. I get off the bus.",
+     "We're here! Get out of the car."
+    ]
+   }
+  ]
+ },
+ {
+  "type": "divider",
+  "section": "Part Three",
+  "title": "Mixed review",
+  "sub": "Place, time, transport and movement"
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "The bakery is <em>___</em> my house.",
+  "options": [
+   "next to",
+   "between",
+   "under",
+   "above"
+  ],
+  "correct": 0,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"My house and a bakery\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><path d=\"M45 105 L115 50 L185 105 Z\" style=\"fill:var(--coral);stroke:var(--coral);stroke-width:3;stroke-linejoin:round\"/><rect x=\"57\" y=\"105\" width=\"116\" height=\"98\" rx=\"6\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><rect x=\"102\" y=\"150\" width=\"28\" height=\"53\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><text x=\"115\" y=\"135\" text-anchor=\"middle\" style=\"fill:var(--ink-dim);font-family:inherit;font-size:15px;font-weight:bold;\">my house</text><rect x=\"185\" y=\"70\" width=\"175\" height=\"133\" rx=\"6\" style=\"fill:var(--card);stroke:var(--yellow);stroke-width:3;\"/><rect x=\"185\" y=\"70\" width=\"175\" height=\"32\" rx=\"6\" style=\"fill:var(--yellow);stroke:var(--yellow);stroke-width:3;\"/><text x=\"272\" y=\"93\" text-anchor=\"middle\" style=\"fill:#132A3D;font-family:inherit;font-size:20px;font-weight:bold;\">BAKERY</text><text x=\"272\" y=\"165\" text-anchor=\"middle\" style=\"font-size:48px;\">🥖</text></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "The ball is <em>___</em> the two chairs.",
+  "options": [
+   "above",
+   "between",
+   "next to",
+   "on"
+  ],
+  "correct": 1,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"Two chairs and a ball\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><line x1=\"130\" y1=\"83\" x2=\"130\" y2=\"148\" style=\"stroke:var(--blue);stroke-width:5;stroke-linecap:round;\"/><rect x=\"60\" y=\"143\" width=\"75\" height=\"10\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><line x1=\"66\" y1=\"153\" x2=\"66\" y2=\"203\" style=\"stroke:var(--blue);stroke-width:5;stroke-linecap:round;\"/><line x1=\"128\" y1=\"153\" x2=\"128\" y2=\"203\" style=\"stroke:var(--blue);stroke-width:5;stroke-linecap:round;\"/><g transform=\"translate(400,0) scale(-1,1)\"><line x1=\"130\" y1=\"83\" x2=\"130\" y2=\"148\" style=\"stroke:var(--blue);stroke-width:5;stroke-linecap:round;\"/><rect x=\"60\" y=\"143\" width=\"75\" height=\"10\" rx=\"3\" style=\"fill:var(--blue);stroke:var(--blue);stroke-width:3;\"/><line x1=\"66\" y1=\"153\" x2=\"66\" y2=\"203\" style=\"stroke:var(--blue);stroke-width:5;stroke-linecap:round;\"/><line x1=\"128\" y1=\"153\" x2=\"128\" y2=\"203\" style=\"stroke:var(--blue);stroke-width:5;stroke-linecap:round;\"/></g><circle cx=\"200\" cy=\"185\" r=\"18\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:3\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "Where are the children? They're <em>___</em> the tree.",
+  "options": [
+   "on",
+   "above",
+   "behind",
+   "in front of"
+  ],
+  "correct": 2,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"Children and a big tree\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><circle cx=\"204\" cy=\"140.0\" r=\"13.0\" style=\"fill:var(--yellow);stroke:var(--coral);stroke-width:3\"/><rect x=\"192.0\" y=\"153.0\" width=\"24.0\" height=\"50.0\" rx=\"8.0\" style=\"fill:var(--coral);stroke:var(--coral);stroke-width:2;\"/><circle cx=\"276\" cy=\"146.3\" r=\"11.700000000000001\" style=\"fill:var(--yellow);stroke:var(--purple);stroke-width:3\"/><rect x=\"265.2\" y=\"158.0\" width=\"21.6\" height=\"45.0\" rx=\"7.2\" style=\"fill:var(--purple);stroke:var(--purple);stroke-width:2;\"/><rect x=\"212\" y=\"80\" width=\"56\" height=\"125\" rx=\"6\" style=\"fill:#8B5A3C;stroke:#6B4429;stroke-width:3;\"/><circle cx=\"240\" cy=\"52\" r=\"48\" style=\"fill:var(--green)\"/><circle cx=\"196\" cy=\"74\" r=\"36\" style=\"fill:var(--green)\"/><circle cx=\"284\" cy=\"74\" r=\"36\" style=\"fill:var(--green)\"/><text x=\"80\" y=\"195\" text-anchor=\"middle\" style=\"font-size:56px;\">🙈</text></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "We go skiing <em>___</em> January.",
+  "options": [
+   "on",
+   "at",
+   "to",
+   "in"
+  ],
+  "correct": 3
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "My birthday is <em>___</em> Friday.",
+  "options": [
+   "on",
+   "in",
+   "at",
+   "to"
+  ],
+  "correct": 0
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "I go to bed <em>___</em> ten o'clock.",
+  "options": [
+   "to",
+   "at",
+   "in",
+   "on"
+  ],
+  "correct": 1
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "I'm <em>___</em> a train to Lisbon.",
+  "options": [
+   "at",
+   "to",
+   "on",
+   "in"
+  ],
+  "correct": 2
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "My aunt is <em>___</em> her car, listening to the radio.",
+  "options": [
+   "on",
+   "at",
+   "to",
+   "in"
+  ],
+  "correct": 3
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "She came <em>___</em> the room and sat down.",
+  "options": [
+   "into",
+   "onto",
+   "off",
+   "up"
+  ],
+  "correct": 0,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A door and a chair in a room\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"205\" x2=\"380\" y2=\"205\" style=\"stroke:var(--line);stroke-width:3;stroke-linecap:round;\"/><rect x=\"20\" y=\"10\" width=\"360\" height=\"195\" rx=\"4\" style=\"fill:rgba(79,168,232,0.08);stroke:var(--line);stroke-width:2;\"/><rect x=\"40\" y=\"70\" width=\"70\" height=\"135\" rx=\"2\" style=\"fill:#1B1B1B;stroke:var(--coral);stroke-width:4;\"/><g transform=\"translate(75,0) scale(-1,1)\"><text x=\"0\" y=\"200\" text-anchor=\"middle\" style=\"font-size:50px;\">🚶‍♀️</text></g><rect x=\"260\" y=\"130\" width=\"80\" height=\"12\" rx=\"3\" style=\"fill:var(--card);stroke:var(--blue);stroke-width:3;\"/><line x1=\"270\" y1=\"142\" x2=\"270\" y2=\"203\" style=\"stroke:var(--blue);stroke-width:4;stroke-linecap:round;\"/><line x1=\"330\" y1=\"142\" x2=\"330\" y2=\"203\" style=\"stroke:var(--blue);stroke-width:4;stroke-linecap:round;\"/><line x1=\"330\" y1=\"90\" x2=\"330\" y2=\"142\" style=\"stroke:var(--blue);stroke-width:5;stroke-linecap:round;\"/><path d=\"M110 175 L240 175\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(240,175) rotate(0)\" style=\"fill:var(--yellow)\"/></svg>"
+ },
+ {
+  "type": "mc",
+  "section": "Part Three",
+  "group": "mixed",
+  "points": 2,
+  "prompt": "We swam <em>___</em> the lake to the other side.",
+  "options": [
+   "onto",
+   "across",
+   "along",
+   "up"
+  ],
+  "correct": 1,
+  "pic": "<svg viewBox=\"0 0 400 220\" role=\"img\" aria-label=\"A lake and a swimmer\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"200\" cy=\"120\" rx=\"185\" ry=\"80\" style=\"fill:rgba(79,168,232,0.35);stroke:var(--green);stroke-width:6\"/><g transform=\"translate(55,0) scale(-1,1)\"><text x=\"0\" y=\"135\" text-anchor=\"middle\" style=\"font-size:40px;\">🏊</text></g><path d=\"M90 120 L345 120\" style=\"fill:none;stroke:var(--yellow);stroke-width:4;stroke-dasharray:9 7;stroke-linecap:round\"/><polygon points=\"4,0 -14,-9 -14,9\" transform=\"translate(345,120) rotate(0)\" style=\"fill:var(--yellow)\"/><text x=\"320\" y=\"30\" text-anchor=\"middle\" style=\"fill:var(--ink-dim);font-family:inherit;font-size:16px;font-weight:normal;\">the other side</text></svg>"
+ },
+ {
+  "type": "groupresult",
+  "group": "mixed"
+ },
+ {
+  "type": "summary",
+  "section": "Part Three",
+  "group": "mixed",
+  "clusterId": "mixed-explain",
+  "explain": [
+   {
+    "title": "Four kinds of preposition",
+    "text": "Ask yourself: is it <em>where</em>, <em>when</em>, <em>how you travel</em> or <em>which direction</em>?",
+    "table": [
+     [
+      "Place (where?)",
+      "in, on, under, above, next to, between, in front of, behind"
+     ],
+     [
+      "Time (when?)",
+      "in May, on Friday, at ten o'clock"
+     ],
+     [
+      "Transport (how?)",
+      "on a train, in a car, by bus, on foot"
+     ],
+     [
+      "Movement (direction?)",
+      "to, from, into, out of, across, through, over, under"
+     ]
+    ]
+   }
+  ],
+  "first": true
+ },
+ {
+  "type": "end"
+ }
+];
+
+const CORRECT_PHRASES = [
+  "Well done!",
+  "Great job!",
+  "You got it!",
+  "Excellent!",
+  "That's right!",
+  "Super!",
+  "Amazing!",
+  "Perfect!"
+];
+const INCORRECT_PHRASES = [
+  "Good try!",
+  "Nice try! Keep going!",
+  "Almost! Try again next time!",
+  "Don't worry, keep learning!",
+  "You'll get the next one!",
+  "Keep practising!",
+  "Good effort!"
+];
+function randomPhrase(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+let theme = "dark";
+const themeToggle = document.getElementById("themeToggle");
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme", theme);
+  themeToggle.textContent = theme === "dark" ? "\u2600 Light mode" : "\u263D Dark mode";
+}
+themeToggle.addEventListener("click", () => {
+  theme = theme === "dark" ? "light" : "dark";
+  applyTheme();
+});
+applyTheme();
+
+let current = 0;
+let mode = null;
+const scoreState = {};
+const selectedState = {};
+const explainShown = {};
+let teamOwner = {};
+
+const jumpSelect = document.getElementById("jumpSelect");
+function buildJumpMenu(){
+  const targets = [{label:"Start", index:0}];
+  slides.forEach((s, i) => {
+    if(s.type === "divider") targets.push({label:s.section + ": " + s.title, index:i});
+    if(s.type === "summary" && s.first) targets.push({label:s.section + ": explanation", index:i});
+    if(s.type === "sessionbreak") targets.push({label:"Session 2 (start)", index:i});
+    if(s.type === "end") targets.push({label:"Final results", index:i});
+  });
+  jumpSelect.innerHTML = targets.map(t => `<option value="${t.index}">Jump to: ${t.label}</option>`).join("");
+}
+buildJumpMenu();
+jumpSelect.addEventListener("change", () => {
+  current = parseInt(jumpSelect.value);
+  render();
+});
+function syncJumpSelect(){
+  const options = Array.from(jumpSelect.options).map(o => parseInt(o.value));
+  let best = options[0];
+  options.forEach(v => { if(v <= current) best = v; });
+  jumpSelect.value = best;
+}
+let timerInterval = null;
+const QUESTION_SECONDS = 75;
+
+const stage = document.getElementById("stage");
+const topbar = document.getElementById("topbar");
+const sectionTag = document.getElementById("sectionTag");
+const scoreChips = document.getElementById("scoreChips");
+const progress = document.getElementById("progress");
+const counter = document.getElementById("counter");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const hint = document.getElementById("hint");
+
+const questionSlides = slides.filter(s => s.type === "mc");
+
+function buildProgress(){
+  progress.innerHTML = "";
+  questionSlides.forEach(() => {
+    const d = document.createElement("div");
+    d.className = "dot";
+    progress.appendChild(d);
+  });
+}
+buildProgress();
+
+function assignTeams(){
+  teamOwner = {};
+  let turn = "A";
+  slides.forEach((s, i) => {
+    if(s.type === "mc"){
+      teamOwner[i] = turn;
+      turn = (turn === "A") ? "B" : "A";
+    }
+  });
+}
+
+function formatTime(sec){
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return m + ":" + (s < 10 ? "0" : "") + s;
+}
+
+function startTimer(onExpire){
+  let timeLeft = QUESTION_SECONDS;
+  const valueEl = document.getElementById("timerValue");
+  const fillEl = document.getElementById("timerBarFill");
+  function paint(){
+    if(!valueEl) return;
+    valueEl.textContent = formatTime(timeLeft);
+    const pct = Math.max(0, (timeLeft / QUESTION_SECONDS) * 100);
+    if(fillEl) fillEl.style.width = pct + "%";
+    if(timeLeft <= 10){
+      valueEl.classList.add("urgent");
+      if(fillEl) fillEl.classList.add("urgent");
+    }
+  }
+  paint();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    paint();
+    if(timeLeft <= 0){
+      clearInterval(timerInterval);
+      timerInterval = null;
+      onExpire();
+    }
+  }, 1000);
+}
+
+function groupInfo(gid){ return groups.find(g => g.id === gid); }
+
+function groupScore(gid){
+  let earned = 0;
+  slides.forEach((s, i) => { if(s.group === gid && scoreState[i] !== undefined) earned += scoreState[i]; });
+  return earned;
+}
+function totalScore(){
+  let earned = 0;
+  Object.keys(scoreState).forEach(i => { earned += scoreState[i]; });
+  return earned;
+}
+function teamEarned(team, gid){
+  let earned = 0;
+  slides.forEach((s, i) => {
+    if(s.type === "mc" && teamOwner[i] === team && (!gid || s.group === gid) && scoreState[i] !== undefined) earned += scoreState[i];
+  });
+  return earned;
+}
+function teamMax(team, gid){
+  let max = 0;
+  slides.forEach((s, i) => {
+    if(s.type === "mc" && teamOwner[i] === team && (!gid || s.group === gid)) max += s.points;
+  });
+  return max;
+}
+
+function renderScoreChips(){
+  scoreChips.innerHTML = "";
+  if(mode === "team"){
+    const a = document.createElement("div");
+    a.className = "score-chip a";
+    a.textContent = "Team A: " + teamEarned("A");
+    const b = document.createElement("div");
+    b.className = "score-chip b";
+    b.textContent = "Team B: " + teamEarned("B");
+    scoreChips.appendChild(a);
+    scoreChips.appendChild(b);
+  } else if(mode === "individual"){
+    const s = document.createElement("div");
+    s.className = "score-chip solo";
+    s.textContent = "Score: " + totalScore() + " / 100";
+    scoreChips.appendChild(s);
+  }
+}
+
+function render(){
+  if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
+  const s = slides[current];
+  stage.innerHTML = "";
+
+  if(s.type === "title"){
+    topbar.style.visibility = "hidden";
+    hint.textContent = "Use the arrow keys or click the buttons";
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <div class="title-main">${s.main}</div>
+      <div class="title-sub">${s.sub}</div>
+      <div class="title-note">${s.note}</div>`;
+    stage.appendChild(div);
+    nextBtn.disabled = false;
+
+  } else if(s.type === "mode"){
+    topbar.style.visibility = "hidden";
+    hint.textContent = "Choose how the class will play";
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <div class="mode-title">How do you want to play?</div>
+      <div class="mode-options">
+        <button class="mode-btn" id="soloBtn">Play individually<span class="sub">One shared score</span></button>
+        <button class="mode-btn" id="teamBtn">Play in teams<span class="sub">Team A vs Team B, alternating turns</span></button>
+      </div>`;
+    stage.appendChild(div);
+    document.getElementById("soloBtn").addEventListener("click", () => {
+      mode = "individual";
+      current++;
+      render();
+    });
+    document.getElementById("teamBtn").addEventListener("click", () => {
+      mode = "team";
+      assignTeams();
+      current++;
+      render();
+    });
+    nextBtn.disabled = true;
+
+  } else if(s.type === "goodluck"){
+    topbar.style.visibility = "hidden";
+    hint.textContent = "Use the arrow keys or click the buttons";
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <div class="goodluck-text">Good Luck!</div>
+      <div class="goodluck-note">${mode === "team" ? "Team A and Team B, get ready!" : "Get ready to show what you know!"}</div>`;
+    stage.appendChild(div);
+    nextBtn.disabled = false;
+
+  } else if(s.type === "sessionbreak"){
+    topbar.style.visibility = "hidden";
+    hint.textContent = "Use the arrow keys or click the buttons";
+    const div = document.createElement("div");
+    div.className = "card";
+    let scoreHtml;
+    if(mode === "team"){
+      scoreHtml = `<div class="team-score-row">
+        <div class="team-score-col a"><div class="name">Team A</div><div class="val">${teamEarned("A")} pts</div></div>
+        <div class="team-score-col b"><div class="name">Team B</div><div class="val">${teamEarned("B")} pts</div></div>
+      </div>`;
+    } else {
+      scoreHtml = `<div class="final-total-value">${totalScore()} pts so far</div>`;
+    }
+    div.innerHTML = `
+      <div class="divider-title">End of Session 1</div>
+      <div class="divider-sub">Session 2 starts here. See you next lesson!</div>
+      ${scoreHtml}`;
+    stage.appendChild(div);
+    nextBtn.disabled = false;
+
+  } else if(s.type === "end"){
+    topbar.style.visibility = "hidden";
+    hint.textContent = "Use the arrow keys or click the buttons";
+    const div = document.createElement("div");
+    div.className = "card";
+
+    if(mode === "team"){
+      const earnedA = teamEarned("A"), maxA = teamMax("A");
+      const earnedB = teamEarned("B"), maxB = teamMax("B");
+      const pctA = maxA ? Math.round((earnedA / maxA) * 100) : 0;
+      const pctB = maxB ? Math.round((earnedB / maxB) * 100) : 0;
+      let winner;
+      if(pctA > pctB) winner = "Team A wins! Well done, everyone!";
+      else if(pctB > pctA) winner = "Team B wins! Well done, everyone!";
+      else winner = "It's a tie! Well done, everyone!";
+
+      const rows = groups.map(g => {
+        const a = teamEarned("A", g.id), maxGA = teamMax("A", g.id);
+        const b = teamEarned("B", g.id), maxGB = teamMax("B", g.id);
+        return `<div class="breakdown-row"><span class="name">${g.label}</span><span class="score">A: ${a}/${maxGA} &nbsp; B: ${b}/${maxGB}</span></div>`;
+      }).join("");
+
+      div.innerHTML = `
+        <div class="final-total-label">Final result</div>
+        <div class="team-score-row">
+          <div class="team-score-col a"><div class="name">Team A</div><div class="val">${pctA}%</div></div>
+          <div class="team-score-col b"><div class="name">Team B</div><div class="val">${pctB}%</div></div>
+        </div>
+        <div class="final-message">${winner}</div>
+        <div class="breakdown">${rows}</div>`;
+    } else {
+      const total = totalScore();
+      const pct = Math.round(total);
+      let message;
+      if(pct >= 90) message = "Amazing! You know this very well!";
+      else if(pct >= 75) message = "Great job! You know your prepositions!";
+      else if(pct >= 50) message = "Good work! Keep practising!";
+      else if(pct >= 25) message = "Keep trying! You are learning!";
+      else message = "Good effort! Let's practise more together!";
+
+      const rows = groups.map(g => {
+        const earned = groupScore(g.id);
+        return `<div class="breakdown-row"><span class="name">${g.label}</span><span class="score">${earned} / ${g.points}</span></div>`;
+      }).join("");
+
+      div.innerHTML = `
+        <div class="final-total-label">Final score</div>
+        <div class="final-total-value">${pct}%</div>
+        <div class="final-message">${message}</div>
+        <div class="breakdown">${rows}</div>`;
+    }
+    stage.appendChild(div);
+    nextBtn.disabled = false;
+
+  } else if(s.type === "divider"){
+    topbar.style.visibility = "visible";
+    updateTopbar(s);
+    hint.textContent = "Use the arrow keys or click the buttons";
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <div class="divider-eyebrow">${s.section}</div>
+      <div class="divider-title">${s.title}</div>
+      <div class="divider-sub">${s.sub}</div>`;
+    stage.appendChild(div);
+    nextBtn.disabled = false;
+
+  } else if(s.type === "summary"){
+    topbar.style.visibility = "visible";
+    updateTopbar(s);
+    hint.textContent = "The teacher or the class decides whether to see the explanation";
+    const div = document.createElement("div");
+    div.className = "card";
+    stage.appendChild(div);
+
+    function renderContent(){
+      const blocks = s.explain.map(b => {
+        const tableHtml = b.table
+          ? '<div class="rule-table">' + b.table.map(row =>
+              '<div class="subj">' + row[0] + '</div><div class="form">' + row[1] + '</div>'
+            ).join("") + '</div>'
+          : "";
+        const examplesHtml = b.examples
+          ? '<div class="example-list">' + b.examples.map(ex =>
+              '<div class="example-line">' + ex + '</div>'
+            ).join("") + '</div>'
+          : "";
+        return '<div class="summary-block"><div class="rule-title">' + b.title + '</div><div class="rule-text">' + b.text + '</div>' + tableHtml + examplesHtml + '</div>';
+      }).join("");
+      const treeHtml = s.svg ? '<div class="svg-wrap">' + s.svg + '</div>' : "";
+      div.innerHTML = treeHtml + '<div class="summary-list">' + blocks + '</div>';
+    }
+
+    if(explainShown[s.clusterId]){
+      renderContent();
+    } else if(s.first){
+      div.innerHTML = `
+        <div class="summary-heading">Would you like the material explained?</div>
+        <div class="summary-choice">
+          <button class="summary-btn" id="showSummaryBtn">Show explanation</button>
+          <button class="summary-btn" id="skipSummaryBtn">Skip</button>
+        </div>`;
+      div.querySelector("#showSummaryBtn").addEventListener("click", () => {
+        explainShown[s.clusterId] = true;
+        renderContent();
+      });
+      div.querySelector("#skipSummaryBtn").addEventListener("click", () => {
+        let count = 0;
+        for(let i = current; i < slides.length && slides[i].clusterId === s.clusterId; i++) count++;
+        current += count;
+        render();
+      });
+    } else {
+      current++;
+      render();
+      return;
+    }
+
+    nextBtn.disabled = false;
+
+  } else if(s.type === "groupresult"){
+    topbar.style.visibility = "visible";
+    updateTopbar(s);
+    hint.textContent = "Use the arrow keys or click the buttons";
+    const g = groupInfo(s.group);
+    const div = document.createElement("div");
+    div.className = "card";
+
+    if(mode === "team"){
+      const a = teamEarned("A", g.id), maxA = teamMax("A", g.id);
+      const b = teamEarned("B", g.id), maxB = teamMax("B", g.id);
+      div.innerHTML = `
+        <div class="group-score-title">${g.label}: team scores</div>
+        <div class="team-score-row">
+          <div class="team-score-col a"><div class="name">Team A</div><div class="val">${a} / ${maxA}</div></div>
+          <div class="team-score-col b"><div class="name">Team B</div><div class="val">${b} / ${maxB}</div></div>
+        </div>`;
+    } else {
+      const earned = groupScore(s.group);
+      const pct = Math.round((earned / g.points) * 100);
+      div.innerHTML = `
+        <div class="group-score-title">${g.label}: group score</div>
+        <div class="group-score-value">${earned} / ${g.points}</div>
+        <div class="group-score-pct">${pct}% of this part</div>`;
+    }
+    stage.appendChild(div);
+    nextBtn.disabled = false;
+
+  } else if(s.type === "mc"){
+    topbar.style.visibility = "visible";
+    updateTopbar(s);
+    hint.textContent = "Click an option to reveal the answer instantly";
+    const div = document.createElement("div");
+    div.className = "card";
+
+    const alreadyScored = scoreState[current] !== undefined;
+    const owner = teamOwner[current];
+    const turnHtml = (mode === "team")
+      ? `<div class="turn-badge ${owner === "A" ? "a" : "b"}">Team ${owner}'s turn</div>`
+      : "";
+    const timerHtml = alreadyScored ? "" : `
+      <div class="timer-wrap">
+        <div class="timer-label">Time left</div>
+        <div class="timer-value" id="timerValue">1:15</div>
+        <div class="timer-bar-track"><div class="timer-bar-fill" id="timerBarFill"></div></div>
+      </div>`;
+    const optsHtml = s.options.map((opt, i) =>
+      `<button class="opt" data-i="${i}">${opt}</button>`
+    ).join("");
+
+    div.innerHTML = `
+      ${turnHtml}
+      ${timerHtml}
+      ${s.pic ? `<div class="pic-row"><div class="q-pic">${s.pic}</div><div class="pic-main"><div class="prompt">${s.prompt}</div><div class="options">${optsHtml}</div></div></div>` : `<div class="prompt">${s.prompt}</div><div class="options">${optsHtml}</div>`}
+      <div class="answer-banner" id="answerBanner"></div>`;
+    stage.appendChild(div);
+
+    const btns = div.querySelectorAll(".opt");
+    let selected = selectedState[current] !== undefined ? selectedState[current] : null;
+
+    function finalize(chosenIndex){
+      if(chosenIndex !== null && chosenIndex !== undefined){
+        selected = chosenIndex;
+        selectedState[current] = selected;
+      }
+      const timerWrap = div.querySelector(".timer-wrap");
+      if(timerWrap) timerWrap.style.display = "none";
+      btns.forEach((x, i) => {
+        x.disabled = true;
+        if(i === s.correct) x.classList.add("correct");
+        else if(i === selected) x.classList.add("wrong");
+      });
+      const isCorrect = selected === s.correct;
+      if(scoreState[current] === undefined){
+        scoreState[current] = isCorrect ? s.points : 0;
+      }
+      const verdictHtml = isCorrect
+        ? '<div class="verdict right">Correct! +' + s.points + ' points</div>'
+        : '<div class="verdict wrong">Incorrect: 0 points</div>';
+      const phrase = isCorrect ? randomPhrase(CORRECT_PHRASES) : randomPhrase(INCORRECT_PHRASES);
+      document.getElementById("answerBanner").innerHTML =
+        '<div class="label">Correct answer</div><div class="value">' + s.options[s.correct] + '</div>' +
+        verdictHtml + '<div class="phrase">' + phrase + '</div>';
+      renderScoreChips();
+    }
+
+    btns.forEach(b => {
+      b.addEventListener("click", () => {
+        if(b.disabled) return;
+        finalize(parseInt(b.dataset.i));
+      });
+    });
+
+    if(alreadyScored){ finalize(selected); }
+    else{ startTimer(() => finalize(selected)); }
+  }
+
+  renderScoreChips();
+  syncJumpSelect();
+  prevBtn.disabled = current === 0;
+  nextBtn.textContent = current === slides.length - 1 ? "Restart" : "Next \u2192";
+}
+
+function updateTopbar(s){
+  sectionTag.textContent = s.section || "Results";
+  const idx = questionSlides.indexOf(s);
+  if(idx >= 0){
+    counter.textContent = (idx + 1) + " / " + questionSlides.length;
+  } else {
+    counter.textContent = questionSlides.length + " / " + questionSlides.length;
+  }
+  const dots = progress.querySelectorAll(".dot");
+  dots.forEach((d, i) => {
+    d.classList.remove("done","current");
+    if(i < idx) d.classList.add("done");
+    if(i === idx) d.classList.add("current");
+  });
+}
+
+prevBtn.addEventListener("click", () => {
+  if(current > 0){ current--; render(); }
+});
+nextBtn.addEventListener("click", () => {
+  if(nextBtn.disabled) return;
+  if(current < slides.length - 1){ current++; }
+  else {
+    current = 0;
+    mode = null;
+    teamOwner = {};
+    for(const k in scoreState){ delete scoreState[k]; }
+    for(const k in selectedState){ delete selectedState[k]; }
+  }
+  render();
+});
+document.addEventListener("keydown", (e) => {
+  if(e.key === "ArrowRight"){ nextBtn.click(); }
+  if(e.key === "ArrowLeft"){ prevBtn.click(); }
+});
+
+render();
+</script>
+</body>
+</html>
